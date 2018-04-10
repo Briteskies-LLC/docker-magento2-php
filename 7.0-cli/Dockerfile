@@ -31,6 +31,15 @@ RUN apt-get update && apt-get install -y \
         json \
         iconv
 
+# Add elastic search 2.4.6
+RUN wget https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.4.6/elasticsearch-2.4.6.deb
+RUN dpkg -i elasticsearch-2.4.6.deb
+RUN systemctl enable elasticsearch.service
+RUN /usr/share/elasticsearch/bin/plugin install analysis-phonetic
+RUN /usr/share/elasticsearch/bin/plugin install analysis-icu
+RUN echo  "script.inline: on" >> /etc/elasticsearch/elasticsearch.yml
+RUN echo "script.indexed: on" >> /etc/elasticsearch/elasticsearch.yml
+
 # Generic Configuration
 
 ADD docker-entrypoint.sh /docker-entrypoint.sh
